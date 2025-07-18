@@ -9,7 +9,7 @@ class HomeScreen extends ConsumerWidget {
     final state = ref.watch(homeProvider);
     final size = MediaQuery.of(context).size;
 
-    // Debug print for forecast dates (outside the widget tree)
+    // Debug print for forecast dates and device time
     if (state.forecast != null && state.forecast!.isNotEmpty) {
       for (final day in state.forecast!) {
         print('Forecast date from API: ${day.date}');
@@ -37,6 +37,7 @@ class HomeScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Header: Greeting and user name
                 Text(
                   'Hello',
                   style: TextStyle(
@@ -115,7 +116,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                 SizedBox(height: 32),
-                // Main weather info (show first day)
+                // Main weather info
                 if (state.forecast != null && state.forecast!.isNotEmpty)
                   Center(
                     child: Column(
@@ -171,7 +172,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                 SizedBox(height: 32),
-                // Animated weather details (show first day)
+                // Animated weather details
                 if (state.forecast != null && state.forecast!.isNotEmpty)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -209,7 +210,7 @@ class HomeScreen extends ConsumerWidget {
                     ],
                   ),
                 SizedBox(height: 32),
-                // Placeholder for chart/graph (can be replaced with a weather trend chart)
+                // Weather trend chart placeholder
                 Container(
                   height: 120,
                   decoration: BoxDecoration(
@@ -233,6 +234,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
+  // Helper: Get weekday string from DateTime
   String _weekdayFromDate(DateTime dt) {
     switch (dt.weekday) {
       case 1:
