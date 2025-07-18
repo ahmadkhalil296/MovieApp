@@ -2,12 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'signup_screen.dart';
 import 'login_form_provider.dart';
+import '../../weather/presentation/home_screen.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  bool _navigated = false;
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(loginFormProvider);
     final notifier = ref.read(loginFormProvider.notifier);
+
+    ref.listen<LoginFormState>(loginFormProvider, (previous, next) {
+      if (!_navigated && !next.isLoading && next.error == null && previous?.isLoading == true) {
+        _navigated = true;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }
+    });
+
     return Scaffold(
       backgroundColor: Color(0xFF010C2A),
       body: SafeArea(

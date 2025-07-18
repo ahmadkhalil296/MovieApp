@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupFormState {
   final String fullName;
@@ -49,13 +51,38 @@ class SignupFormNotifier extends StateNotifier<SignupFormState> {
   Future<void> submit() async {
     setLoading(true);
     setError(null);
-    await Future.delayed(Duration(seconds: 1)); // Simulate network
-    if (state.email.isNotEmpty && state.password.isNotEmpty && state.fullName.isNotEmpty) {
-      // Success
+    try {
+      if (state.email.isEmpty || state.password.isEmpty || state.fullName.isEmpty) {
+        setLoading(false);
+        setError('Please fill all fields');
+        return;
+      }
+      // Create user with Firebase Auth
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: state.email,
+        password: state.password,
+      );
+      // Store additional user info in Firestore
+      final user = userCredential.user;
+      if (user != null) {
+        print('Saving user to Firestore: UID=${user.uid}, fullName=${state.fullName}');
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'fullName': state.fullName,
+          'email': state.email,
+        });
+        print('User saved to Firestore successfully.');
+      } else {
+        print('User is null after signup.');
+      }
       setLoading(false);
-    } else {
+    } on FirebaseAuthException catch (e) {
       setLoading(false);
-      setError('Please fill all fields');
+      setError(e.message ?? 'Signup failed');
+      print('FirebaseAuthException: ${e.message}');
+    } catch (e) {
+      setLoading(false);
+      setError('An unexpected error occurred');
+      print('Signup error: $e');
     }
   }
 }

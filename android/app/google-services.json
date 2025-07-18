@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "701317335648",
+    "project_id": "wheatherapp-82179",
+    "storage_bucket": "wheatherapp-82179.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701317335648:android:4b12629a49ec1770f6d105",
+        "android_client_info": {
+          "package_name": "com.example.movieapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu38mcsFSAiXrYkLAheAoorWRvugRFCGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
